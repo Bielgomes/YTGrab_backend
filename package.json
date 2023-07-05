@@ -1,0 +1,27 @@
+{
+  "name": "download-video",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx watch src/server.ts",
+    "lint": "eslint src --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "fastify": "^4.19.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "ytdl-core": "^4.11.4"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^1.2.0",
+    "@types/fluent-ffmpeg": "^2.1.21",
+    "@types/node": "^20.3.3",
+    "eslint": "^8.44.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  }
+}

@@ -139,7 +139,7 @@ app.get('/download/:id', async (request, reply) => {
     quality: 'highestaudio',
   })
 
-  const filePath = `videos/output_${Date.now()}.mp4`
+  const filePath = `src/temp/output_${Date.now()}.mp4`
 
   try {
     await combineStreams(audioStream, videoStream, filePath)

@@ -1,13 +1,9 @@
 import 'dotenv/config'
-
+import { combineStreams } from './scripts/combineStreams'
 import fastify, { FastifyInstance } from 'fastify'
-
 import ffmpeg from 'fluent-ffmpeg'
 import ytdl from 'ytdl-core'
-
 import fs from 'fs'
-
-import { combineStreams } from '../scripts/combineStreams'
 
 const app: FastifyInstance = fastify()
 
@@ -46,7 +42,7 @@ const MP3bitrates = {
 
 app.addHook('onRequest', (request, reply, done) => {
   reply.header('Access-Control-Allow-Origin', 'http://localhost:5173')
-  reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+  reply.header('Access-Control-Allow-Methods', 'GET, POST')
   reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
   if (request.method === 'OPTIONS') {
@@ -57,10 +53,6 @@ app.addHook('onRequest', (request, reply, done) => {
 })
 
 app.get('/info/:id', async (request, reply) => {
-  const { authorization } = request.headers as { authorization: string }
-  if (authorization !== process.env.AUTHORIZATION) {
-    return reply.status(401).send({ error: 'Unauthorized' })
-  }
 
   const { id } = request.params as { id: string }
 
@@ -114,13 +106,8 @@ app.get('/info/:id', async (request, reply) => {
 })
 
 app.get('/download/:id', async (request, reply) => {
-  const { authorization } = request.headers as { authorization: string }
   const { id } = request.params as { id: string }
   const { quality } = request.query as { quality: number }
-
-  if (authorization !== process.env.AUTHORIZATION) {
-    return reply.status(401).send({ error: 'Unauthorized' })
-  }
 
   if (!quality) {
     return reply.status(400).send({ error: 'Quality not provided' })
@@ -152,7 +139,7 @@ app.get('/download/:id', async (request, reply) => {
     quality: 'highestaudio',
   })
 
-  const filePath = `output_${Date.now()}.mp4`
+  const filePath = `videos/output_${Date.now()}.mp4`
 
   try {
     await combineStreams(audioStream, videoStream, filePath)
@@ -174,13 +161,8 @@ app.get('/download/:id', async (request, reply) => {
 })
 
 app.get('/downloadAudio/:id', async (request, reply) => {
-  const { authorization } = request.headers as { authorization: string }
   const { id } = request.params as { id: string }
   const { bitrate } = request.query as { bitrate: number }
-
-  if (authorization !== process.env.AUTHORIZATION) {
-    return reply.status(401).send({ error: 'Unauthorized' })
-  }
 
   if (!bitrate) {
     return reply.status(400).send({ error: 'Bitrate not provided' })

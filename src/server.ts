@@ -174,12 +174,9 @@ app.get('/download/:id', async (request, reply) => {
 })
 
 app.get('/downloadAudio/:id', async (request, reply) => {
-  console.log('downloadAudio')
   const { authorization } = request.headers as { authorization: string }
   const { id } = request.params as { id: string }
   const { bitrate } = request.query as { bitrate: number }
-
-  console.log('downloadAudio', authorization, id, bitrate)
 
   if (authorization !== process.env.AUTHORIZATION) {
     return reply.status(401).send({ error: 'Unauthorized' })
@@ -200,8 +197,6 @@ app.get('/downloadAudio/:id', async (request, reply) => {
   if (Number(info.videoDetails.lengthSeconds) > 600) {
     return reply.status(413).send({ error: 'Video too long' })
   }
-
-  console.log('downloadAudio', info.videoDetails.title)
 
   const videoStream = ytdl.downloadFromInfo(info, {
     filter: 'audioonly',

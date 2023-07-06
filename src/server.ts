@@ -197,7 +197,7 @@ app.get('/downloadAudio/:id', async (request, reply) => {
 
 app
   .listen({
-    port: 3333,
+    port: 80,
   })
   .then(() => {
     console.log('HTTP Server Running!')

@@ -41,7 +41,7 @@ const MP3bitrates = {
 }
 
 app.addHook('onRequest', (request, reply, done) => {
-  reply.header('Access-Control-Allow-Origin', 'http://172.17.0.157')
+  // reply.header('Access-Control-Allow-Origin', 'http://172.17.0.157')
   reply.header('Access-Control-Allow-Methods', 'GET, POST')
   reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 

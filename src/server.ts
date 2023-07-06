@@ -197,6 +197,7 @@ app.get('/downloadAudio/:id', async (request, reply) => {
 
 app
   .listen({
+    host:"18.230.139.3",
     port: 80,
   })
   .then(() => {

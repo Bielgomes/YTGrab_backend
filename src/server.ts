@@ -40,10 +40,16 @@ const MP3bitrates = {
   64: '64kbps',
 }
 
+const origin = 'https://ytgrab.squareweb.app'
+
 app.addHook('onRequest', (request, reply, done) => {
-  // reply.header('Access-Control-Allow-Origin', 'http://172.17.0.157')
+  reply.header('Access-Control-Allow-Origin', origin)
   reply.header('Access-Control-Allow-Methods', 'GET, POST')
   reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+  if (request.headers.origin !== origin) {
+    return reply.status(403).send({ error: 'Invalid Origin' })
+  }
 
   if (request.method === 'OPTIONS') {
     reply.status(200).send()
@@ -85,7 +91,7 @@ app.get('/info/:id', async (request, reply) => {
       quality: MP3bitrates[bitrate as keyof typeof MP3bitrates],
       fileSize: (audioSeconds * (bitrate * 1000)) / (8 * 1024 * 1024),
     })
-  })!
+  })
 
   const sortedMp4Qualities: IQuality[] = mp4Qualities.sort((a, b) => {
     return MP4Order.indexOf(a.itag) - MP4Order.indexOf(b.itag)
@@ -201,9 +207,9 @@ app.get('/downloadAudio/:id', async (request, reply) => {
 
 app
   .listen({
-    host: '18.230.139.3',
-    port: 80,
+    host: 'ec2-15-229-32-112.sa-east-1.compute.amazonaws.com',
+    port: 8080,
   })
   .then(() => {
-    console.log('HTTP Server Running!')
+    console.log('HTTP Server Running! 🚀 - PORT 8080')
   })

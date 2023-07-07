@@ -12,14 +12,16 @@ export async function combineStreams(
       'pipe:0', // Áudio stream como entrada
       '-i',
       'pipe:1', // Vídeo stream como entrada
-      '-c',
-      'copy', // Copiar os streams sem re-encode
+      '-c:v',
+      'copy', // Copiar o fluxo de vídeo sem re-encode
+      '-c:a',
+      'aac', // Re-encode o fluxo de áudio para AAC
       '-map',
       '0:a', // Mapear o primeiro stream de áudio
       '-map',
       '1:v', // Mapear o primeiro stream de vídeo
       '-movflags',
-      'faststart', // Mover os metadados para o início do arquivo
+      '+faststart', // Mover os metadados para o início do arquivo
       filePath, // Saída do arquivo
     ])
 
@@ -42,7 +44,7 @@ export async function combineStreams(
       }
     })
 
-    audioStream.pipe(ffmpeg.stdio[0] as any)
-    videoStream.pipe(ffmpeg.stdio[1] as any)
+    audioStream.pipe(ffmpeg.stdio[0])
+    videoStream.pipe(ffmpeg.stdio[1])
   })
 }

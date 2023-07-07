@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream'
 import cp from 'child_process'
 
-export function combineStreams(
+export async function combineStreams(
   audioStream: Readable,
   videoStream: Readable,
   filePath: string,

@@ -53,7 +53,6 @@ app.addHook('onRequest', (request, reply, done) => {
 })
 
 app.get('/info/:id', async (request, reply) => {
-
   const { id } = request.params as { id: string }
 
   const info = await ytdl.getBasicInfo(id).catch(() => {
@@ -109,6 +108,8 @@ app.get('/download/:id', async (request, reply) => {
   const { id } = request.params as { id: string }
   const { quality } = request.query as { quality: number }
 
+  console.log(`New Request: ${id}`)
+
   if (!quality) {
     return reply.status(400).send({ error: 'Quality not provided' })
   }
@@ -142,8 +143,10 @@ app.get('/download/:id', async (request, reply) => {
   const filePath = `src/temp/output_${Date.now()}.mp4`
 
   try {
+    console.log(`${id}: Combine Streams`)
     await combineStreams(audioStream, videoStream, filePath)
     const fileStream = fs.createReadStream(filePath)
+    console.log(`${id}: Combine Streams Finished`)
 
     fileStream.on('close', () => {
       fs.unlinkSync(filePath)
@@ -154,6 +157,7 @@ app.get('/download/:id', async (request, reply) => {
       'Content-Disposition',
       `attachment; filename="${Date.now()}-ytgrab.mp4"`,
     )
+    console.log(`${id}: Send File`)
     await reply.send(fileStream)
   } catch (err) {
     return reply.status(500).send({ error: 'Internal server error' })
@@ -197,7 +201,7 @@ app.get('/downloadAudio/:id', async (request, reply) => {
 
 app
   .listen({
-    host:"18.230.139.3",
+    host: '18.230.139.3',
     port: 80,
   })
   .then(() => {

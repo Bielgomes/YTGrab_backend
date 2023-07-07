@@ -40,14 +40,12 @@ const MP3bitrates = {
   64: '64kbps',
 }
 
-const origin = 'https://ytgrab.squareweb.app'
-
 app.addHook('onRequest', (request, reply, done) => {
-  reply.header('Access-Control-Allow-Origin', origin)
+  reply.header('Access-Control-Allow-Origin', 'https://ytgrab.squareweb.app')
   reply.header('Access-Control-Allow-Methods', 'GET, POST')
-  reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  reply.header('Access-Control-Allow-Headers', 'Content-Type')
 
-  if (request.headers.origin !== origin) {
+  if (request.headers.origin !== 'https://ytgrab.squareweb.app') {
     return reply.status(403).send({ error: 'Invalid Origin' })
   }
 
